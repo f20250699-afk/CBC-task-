@@ -9,34 +9,43 @@
 - **NanoAI-Style Dashboard**: A premium, responsive web interface modeled after modern AI dashboards.
 
 ## Project Structure
-- `index.html`: The main web dashboard (Static frontend).
-- `1_backend_and_architecture.md`: Detailed documentation of the FastAPI backend and system logic.
+- `frontend/`: The User Interface (HTML, CSS, JS). Detached from the backend.
+- `backend/`: The FastAPI backend containing the Deterministic Rules Engine, Models, and LLM NLU layer.
+- `1_backend_and_architecture.md`: Detailed documentation of the backend architecture.
 - `frontend.md`: Design specifications and UI/UX architecture.
 - `3_mistake_analysis_and_edge_cases.md`: Adversarial testing logs and production-readiness analysis.
 
 ## Getting Started
 
-### 1. Frontend (Web Dashboard)
-The primary interface is a standalone static HTML file. You can run it by opening `index.html` in any modern web browser.
-- **Zero Dependencies**: Works offline and can be deployed from a USB drive or any static host.
+You will need to start both the Python backend API and the local Web Server for the frontend. You need two terminal windows.
 
-### 2. Backend (FastAPI)
-The project documentation includes a comprehensive FastAPI implementation for the NLU and Matching Engine.
-- **Installation**:
+### 1. Backend (FastAPI + LLM NLU)
+The backend requires an OpenAI-compatible API key (SambaNova, OpenAI, or Anthropic).
+- **Setup & Installation**:
   ```bash
-  python -m venv .venv
+  cd backend
+  python3 -m venv .venv
   source .venv/bin/activate
-  pip install fastapi uvicorn pydantic anthropic redis networkx
+  pip install -r requirements.txt
+  cp .env.example .env
   ```
 - **Configuration**:
-  Set your API keys as environment variables:
-  ```bash
-  export ANTHROPIC_API_KEY="YOUR_API_KEY"
-  ```
+  Edit the `backend/.env` file with your specific `LLM_API_KEY` and `LLM_BASE_URL` (SambaNova example is inside).
 - **Execution**:
   ```bash
-  uvicorn app:app --reload --port 8000
+  # Inside backend folder with venv activated
+  uvicorn main:app --reload --port 8000
   ```
+
+### 2. Frontend (Web Dashboard)
+The frontend communicates directly with `localhost:8000`.
+- **Execution**:
+  ```bash
+  cd frontend
+  python3 -m http.server 3000
+  ```
+  Then visit `http://localhost:3000` in your browser.
+
 
 ## Testing & Validation
 The system has been validated against 10 critical adversarial edge cases, including:
