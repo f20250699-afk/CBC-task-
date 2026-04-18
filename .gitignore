@@ -1,0 +1,8 @@
+.DS_Store
+.venv/
+__pycache__/
+*.log
+.env
+.ipynb_checkpoints/
+node_modules/
+dist/
