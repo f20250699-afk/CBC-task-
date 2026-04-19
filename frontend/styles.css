@@ -1,11 +1,11 @@
 :root {
-  --bg-dark: #07090e;
-  --card-bg: rgba(17, 24, 39, 0.7);
-  --border: rgba(255, 255, 255, 0.08);
-  --accent: #3b82f6;
-  --accent-glow: rgba(59, 130, 246, 0.3);
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
+  --bg-dark: #f4f7fb;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --accent: #f97316; /* Vibrant Orange/Coral */
+  --accent-glow: rgba(249, 115, 22, 0.15);
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
   
   --status-qualified: #10b981;
   --status-disqualified: #ef4444;
@@ -24,8 +24,8 @@
 body {
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.05), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.05), transparent 40%);
+    radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.06), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.04), transparent 40%);
   color: var(--text-primary);
   height: 100vh;
   overflow: hidden;
@@ -36,7 +36,7 @@ body {
 header {
   padding: 1.25rem 2rem;
   border-bottom: 1px solid var(--border);
-  background: rgba(7, 9, 14, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   display: flex;
   justify-content: space-between;
@@ -53,7 +53,7 @@ header {
 .logo-icon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #f97316, #fb923c);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@ header {
   font-weight: 800;
   font-size: 1.2rem;
   color: white;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);
 }
 
 .logo-text {
@@ -78,7 +78,7 @@ header {
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.03);
+  background: #f8fafc;
   padding: 0.4rem 0.8rem;
   border-radius: 9999px;
   border: 1px solid var(--border);
@@ -104,13 +104,12 @@ main {
 /* Panels Configuration */
 .panel {
   background: var(--card-bg);
-  backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 1.25rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
 }
 
 .panel-header {
@@ -137,7 +136,7 @@ main {
   flex-direction: column;
   gap: 1.25rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
 }
 
 .message {
@@ -157,7 +156,7 @@ main {
 
 .message-bot {
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.04);
+  background: #f8fafc;
   border: 1px solid var(--border);
   border-bottom-left-radius: 0.25rem;
 }
@@ -178,11 +177,11 @@ main {
 
 .chat-input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
-  color: white;
+  color: var(--text-primary);
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s;
@@ -190,7 +189,8 @@ main {
 
 .chat-input:focus {
   border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.06);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .send-btn {
@@ -209,7 +209,39 @@ main {
 
 .send-btn:hover {
   transform: scale(1.05);
-  background: #2563eb;
+  background: #ea580c;
+}
+
+.touchbar-container {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1.25rem 0.75rem 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.touchbar-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.touchbar-pill {
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.touchbar-pill:hover {
+  background: #f8fafc;
+  color: var(--text-primary);
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 /* ---------------- Panel 2: Results ---------------- */
@@ -224,19 +256,21 @@ main {
 }
 
 .scheme-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 1rem;
   padding: 1.25rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .scheme-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: #cbd5e1;
+  background: #ffffff;
   transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
 .scheme-card-header {
@@ -250,7 +284,7 @@ main {
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.05);
+  background: #f1f5f9;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   text-transform: uppercase;
@@ -299,7 +333,7 @@ main {
 
 .conf-track {
   height: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #e2e8f0;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -323,7 +357,7 @@ main {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: #f8fafc;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
 }
@@ -396,7 +430,7 @@ main {
 }
 
 .modal-content {
-  background: #0f172a;
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 1.5rem;
   width: 100%;
@@ -404,7 +438,7 @@ main {
   max-height: 80vh;
   overflow-y: auto;
   padding: 2rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
 }
 
 .modal-title {
@@ -422,7 +456,7 @@ main {
 
 .audit-step {
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: #f8fafc;
   border-radius: 0.75rem;
   margin-bottom: 0.5rem;
   font-size: 0.85rem;
@@ -433,8 +467,8 @@ main {
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 @media (max-width: 1200px) {
   main { grid-template-columns: 320px 1fr; }

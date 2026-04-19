@@ -5,13 +5,13 @@ import uuid
 import time
 from dotenv import load_dotenv
 
+load_dotenv()
+
 import models
 from models import UserProfile, ChatRequest, ChatResponse, ProfileField, DataSource
 import nlu
 import schemes_db
 from rule_engine import match_scheme, do_gap_analysis
-
-load_dotenv()
 
 app = FastAPI(title="KALAM Welfare Eligibility API")
 
@@ -43,9 +43,16 @@ async def chat_endpoint(request: ChatRequest):
     fields = nlu_res.get("extracted_fields", {})
     confidences = nlu_res.get("confidence", {})
     
+    # Anti-Loop: If NLU failed to capture the user's answer to our previous question,
+    # save their raw text instead of looping the same question.
+    if profile.last_asked_gap:
+        if profile.last_asked_gap not in fields or fields[profile.last_asked_gap] is None:
+            fields[profile.last_asked_gap] = request.message
+            confidences[profile.last_asked_gap] = 0.5
+
+    
     contradictions = []
     
-    # 2. Update Profile & Detect Contradictions
     for fname, new_val in fields.items():
         if new_val is not None and hasattr(profile, fname):
             # Contradiction detection
@@ -90,8 +97,23 @@ async def chat_endpoint(request: ChatRequest):
         if extracted_names:
             reply += f"Maine aapki details ({', '.join(extracted_names)}) update kar di hain. "
             
-        if profile.completion_pct() < 40:
-             reply += getattr(nlu_res, "follow_up_question", "Kripya apne baare mein aur batayein (Age, kaam, state).")
+        if profile.completion_pct() < 100 and gaps:
+            next_gap = gaps[0]["field"]
+            profile.last_asked_gap = next_gap # Track the gap we are asking about
+            FIELD_QUESTIONS = {
+                "age": "Aapki umr (age) kitni hai?",
+                "residence_type": "Aap kahan rehte hain? Gaon (rural) ya shahar (urban)?",
+                "occupation": "Aap kya kaam karte hain?",
+                "marital_status": "Aapka marital status kya hai?",
+                "gender": "Aapka gender kya hai?",
+                "land_ownership_status": "Kya aapke naam par koi zameen hai?",
+                "housing_status": "Aapka ghar kaisa hai? (Kaccha ya Pucca)",
+                "bank_account_linked_aadhaar": "Kya aapka bank account Aadhaar se linked hai?",
+                "secc_2011_listed": "Kya aapka naam BPL/SECC list mein hai?",
+                "income_tax_payer": "Kya aap Income Tax bharte hain?",
+                "state": "Aap kis rajya (state) se hain?"
+            }
+            reply += FIELD_QUESTIONS.get(next_gap, getattr(nlu_res, "follow_up_question", f"Kripya apna {next_gap} batayein."))
         else:
              reply += "Aapki eligibility niche update kar di gayi hai."
 

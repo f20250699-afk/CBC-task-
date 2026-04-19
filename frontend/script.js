@@ -26,10 +26,12 @@ function renderProfile(profileDict, completionPct, ambiguities) {
         if (!key.endsWith("_confidence") && key !== "session_id" && key !== "channel" && key !== "language_preference") {
             if (key === "created_at" || key === "last_updated_at" || key === "turn_count" || key === "contradiction_log") continue;
 
+            const displayKey = key.replace(/_/g, ' ').replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            
             const row = document.createElement('div');
             row.className = 'data-row';
             row.innerHTML = `
-                <div class="data-key">${key.replace(/_/g, ' ')}</div>
+                <div class="data-key">${displayKey}</div>
                 <div class="data-value ${val === null ? 'none' : ''}">${val === null ? 'not defined' : val}</div>
             `;
             container.appendChild(row);
@@ -99,7 +101,7 @@ function showAudit(scheme) {
                 <div>${scheme.next_action}</div>
             </div>` : ''}
         </div>
-        <button onclick="document.getElementById('modal-overlay').style.display='none'" style="width:100%; padding:0.75rem; border-radius:0.75rem; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:white; font-weight:600; cursor:pointer">Close Audit</button>
+        <button onclick="document.getElementById('modal-overlay').style.display='none'" style="width:100%; padding:0.75rem; border-radius:0.75rem; background:#f1f5f9; border:1px solid var(--border); color:var(--text-primary); font-weight:600; cursor:pointer">Close Audit</button>
     `;
 
     modal.style.display = 'flex';
@@ -176,6 +178,7 @@ async function processInput(text) {
 
         renderProfile(data.profile_snapshot, data.profile_completion_pct, Array.from(allAmbigs));
         renderSchemes(data.scheme_matches);
+        renderTouchbars(data.gap_analysis);
         addMessage(data.reply, 'bot');
         
     } catch (e) {
@@ -201,8 +204,42 @@ document.getElementById('chat-input').onkeypress = (e) => {
     }
 };
 
+function renderTouchbars(gapAnalysis) {
+    const container = document.getElementById('touchbar-container');
+    container.innerHTML = '';
+    if (!gapAnalysis || gapAnalysis.length === 0) return;
+
+    const topGap = gapAnalysis[0].field;
+
+    const SUGGESTIONS = {
+        "state": ["Rajasthan", "Bihar", "Uttar Pradesh", "Maharashtra"],
+        "residence_type": ["Gaon (Rural)", "Shahar (Urban)"],
+        "occupation": ["Farmer", "Street Vendor", "Labourer", "Other"],
+        "marital_status": ["Widow", "Married", "Unmarried"],
+        "gender": ["Female", "Male"],
+        "land_ownership_status": ["I own active farm land", "I am a lessee farmer"],
+        "housing_status": ["Kaccha house", "Pucca house"],
+        "bank_account_linked_aadhaar": ["Bank account is linked", "Not linked"],
+        "secc_2011_listed": ["Yes, in SECC List", "Not sure"],
+        "income_tax_payer": ["I don't pay income tax", "I pay income tax"]
+    };
+
+    if (SUGGESTIONS[topGap]) {
+        SUGGESTIONS[topGap].forEach(text => {
+            const pill = document.createElement('div');
+            pill.className = 'touchbar-pill';
+            pill.innerText = text;
+            pill.onclick = () => {
+                document.getElementById('chat-input').value = text;
+                document.getElementById('send-btn').click();
+            };
+            container.appendChild(pill);
+        });
+    }
+}
+
 window.onload = async () => {
-    addMessage("Namaste! Main Kalam Assistant hoon. Aap apne eligibility ke baare mein puch sakte hain. (Try: 'I am Savitri, 52yr widow from Rajasthan, but recently remarried')", "bot");
+    addMessage("Namaste! Main Kalam Assistant hoon. Aapka swagat hai. Shuruwat karne ke liye apna State bataein aur kisi bare mai (e.g., 'Main Rajasthan se hu, meri umr 45 hai')", "bot");
     try {
         const response = await fetch("http://localhost:8000/init");
         if (response.ok) {
@@ -215,6 +252,7 @@ window.onload = async () => {
             });
             renderProfile(data.profile_snapshot, data.profile_completion_pct, Array.from(allAmbigs));
             renderSchemes(data.scheme_matches);
+            renderTouchbars(data.gap_analysis);
         }
     } catch (e) {
         console.error("Initialization failed", e);

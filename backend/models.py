@@ -44,6 +44,7 @@ class UserProfile(BaseModel):
     last_updated_at: float = Field(default_factory=time.time)
     turn_count: int = 0
     contradiction_log: List[dict] = Field(default_factory=list)
+    last_asked_gap: str = ""
 
     def to_flat_dict(self) -> dict:
         result = {}

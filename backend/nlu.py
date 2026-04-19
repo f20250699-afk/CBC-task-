@@ -84,6 +84,22 @@ def fallback_extract(text: str) -> dict:
     if any(w in t for w in ["dobaara","remarried"]):
         fields["remarried"] = True
 
+    # Hinglish Name extraction
+    import re
+    # Covers: "mera naam aamir hai", "aamir naam hai", "mai aamir hu"
+    name_match = re.search(r'(?:mera\s+naam\s+)?([a-z]+)\s+(?:naam\s+hai|hu|hoon)', t)
+    if name_match:
+        fields["name"] = name_match.group(1).capitalize()
+
+    # Simple age extraction (looks for the first number)
+    import re
+    nums = re.findall(r'\d+', t)
+    if nums:
+        # If it's a reasonable age number
+        age_candidate = int(nums[0])
+        if 5 < age_candidate < 110:
+            fields["age"] = age_candidate
+
     intent = "provide_info"
     if any(w in t for w in ["shukriya","thanks","bye"]): intent = "goodbye"
 

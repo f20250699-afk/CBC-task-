@@ -114,5 +114,121 @@ SCHEMES = [
         "benefit_type": "housing",
         "next_action": "Contact Gram Panchayat",
         "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S05",
+        "scheme_name": "PM-SVANidhi",
+        "ministry": "Housing and Urban Affairs",
+        "benefit_summary": "Working Capital Loan",
+        "hard_conditions": [
+            {"field": "occupation", "op": "eq", "value": "street_vendor", "source_clause": "Must be a street vendor"}
+        ],
+        "soft_conditions": [],
+        "exclusions": [],
+        "required_docs": ["aadhaar", "vending_certificate"],
+        "prerequisites": [],
+        "benefit_type": "loan",
+        "next_action": "Apply at PM SVANidhi Portal",
+        "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S06",
+        "scheme_name": "PM-MVY",
+        "ministry": "Women and Child Development",
+        "benefit_summary": "Maternity Benefit Rs. 5000",
+        "hard_conditions": [
+            {"field": "gender", "op": "eq", "value": "female", "source_clause": "Must be female"}
+        ],
+        "soft_conditions": [],
+        "exclusions": [],
+        "required_docs": ["aadhaar", "mcp_card"],
+        "prerequisites": [],
+        "benefit_type": "cash_transfer",
+        "next_action": "Register at Anganwadi Centre",
+        "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S07",
+        "scheme_name": "PM-SYM",
+        "ministry": "Labour and Employment",
+        "benefit_summary": "Pension Rs. 3000/month",
+        "hard_conditions": [
+            {"field": "age", "op": "gte", "value": 18, "source_clause": "Age 18-40"},
+            {"field": "age", "op": "lte", "value": 40, "source_clause": "Age 18-40"}
+        ],
+        "soft_conditions": [],
+        "exclusions": [
+            {"field": "income_tax_payer", "op": "eq", "value": True, "source_clause": "Income tax payers excluded"}
+        ],
+        "required_docs": ["aadhaar", "savings_bank_account"],
+        "prerequisites": [],
+        "benefit_type": "pension",
+        "next_action": "Visit nearest CSC",
+        "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S09",
+        "scheme_name": "Atal Pension Yojana",
+        "ministry": "Finance",
+        "benefit_summary": "Guaranteed Pension",
+        "hard_conditions": [
+            {"field": "age", "op": "gte", "value": 18, "source_clause": "Age 18-40"},
+            {"field": "age", "op": "lte", "value": 40, "source_clause": "Age 18-40"},
+            {"field": "bank_account_linked_aadhaar", "op": "eq", "value": True, "source_clause": "Must have linked bank account"}
+        ],
+        "soft_conditions": [],
+        "exclusions": [],
+        "required_docs": ["aadhaar", "savings_bank_account"],
+        "prerequisites": [],
+        "benefit_type": "pension",
+        "next_action": "Apply through your bank branch",
+        "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S10",
+        "scheme_name": "PM-JDY",
+        "ministry": "Finance",
+        "benefit_summary": "Zero Balance Bank Account",
+        "hard_conditions": [],
+        "soft_conditions": [],
+        "exclusions": [],
+        "required_docs": ["aadhaar"],
+        "prerequisites": [],
+        "benefit_type": "financial_inclusion",
+        "next_action": "Visit any nationalised bank branch",
+        "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S11",
+        "scheme_name": "PMAY-U",
+        "ministry": "Housing and Urban Affairs",
+        "benefit_summary": "Urban Housing Subsidy",
+        "hard_conditions": [
+            {"field": "residence_type", "op": "eq", "value": "urban", "source_clause": "Urban only"},
+            {"field": "housing_status", "op": "in", "value": ["houseless", "kaccha_house"], "source_clause": "Must not have pucca house"}
+        ],
+        "soft_conditions": [],
+        "exclusions": [
+            {"field": "housing_status", "op": "eq", "value": "pucca_house", "source_clause": "Pucca house owners excluded"}
+        ],
+        "required_docs": ["aadhaar", "income_certificate"],
+        "prerequisites": [],
+        "benefit_type": "housing",
+        "next_action": "Apply at PMAY(U) Portal",
+        "ambiguity_flags": []
+    },
+    {
+        "scheme_id": "S12",
+        "scheme_name": "ALIMCO Assistance",
+        "ministry": "Social Justice",
+        "benefit_summary": "Aids for Persons with Disabilities",
+        "hard_conditions": [],
+        "soft_conditions": [],
+        "exclusions": [],
+        "required_docs": ["aadhaar", "disability_certificate", "income_certificate"],
+        "prerequisites": [],
+        "benefit_type": "in_kind",
+        "next_action": "Contact District Welfare Officer",
+        "ambiguity_flags": []
     }
 ]
